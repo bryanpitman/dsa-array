@@ -38,9 +38,10 @@ class LinkedList {
       this.head = newNode;
       this.tail = newNode;
     }
+    else {
     newNode.next = this.head;
     this.head = newNode;
-
+    }
     this.length++;
   }
 
@@ -111,19 +112,101 @@ class LinkedList {
   }
   /** setAt(idx, val): set val at idx to val */
 
-  setAt(idx, val) {}
+  setAt(idx, val) {
+    if (idx < 0 || idx >= this.length) {
+      throw new Error("invalid index");
+    }
+    
+    let currIdx = 0;
+    let current = this.head;
+
+    while (currIdx <= idx) {
+      if (currIdx === idx) {
+        current.val = val;
+      }
+      current = current.next;
+      currIdx++;
+    }
+  }
 
   /** insertAt(idx, val): add node w/val before idx. */
 
-  insertAt(idx, val) {}
+  insertAt(idx, val) {
+    if (idx < 0 || idx > this.length) {
+      throw new Error("invalid index");
+    }
+    
+    let newNode = new Node(val);
+    
+    let currIdx = 0;
+    let current = this.head;
+    
+    if(idx === 0) {
+      this.unshift(val);
+      return;
+    }
+    
+    if(idx === this.length) {
+      this.push(val);
+      return;
+    }
+
+    while (currIdx < idx) {
+      if (currIdx + 1 === idx) {
+        newNode.next = current.next;
+        current.next = newNode;
+        this.length++;
+        break;
+      }
+      current = current.next;
+      currIdx++;
+    }
+  }
 
   /** removeAt(idx): return & remove item at idx, */
 
-  removeAt(idx) {}
+  removeAt(idx) {
+    if (idx < 0 || idx >= this.length) {
+      throw new Error("invalid index");
+    }
+    
+    let currIdx = 0;
+    let current = this.head;
+    
+    if(idx === 0) {
+      return this.shift();
+    }
+    
+    if(idx === this.length - 1) {
+      return this.pop();
+    }
+
+    while (currIdx <= idx) {
+      if (currIdx + 1 === idx) {
+        const removed = current.next.val;
+        current.next = current.next.next;
+        this.length--;
+        return removed;
+      }
+      current = current.next;
+      currIdx++;
+    }
+  }
 
   /** average(): return an average of all values in the list */
 
-  average() {}
+  average() {
+    if(this.head === null) return 0;
+    
+    let current = this.head;
+    let total = 0;
+    for(let i = 0; i < this.length; i++) {
+      total += current.val;
+      current = current.next;
+    }
+    
+    return total / this.length;
+  }
 }
 
 module.exports = LinkedList;
